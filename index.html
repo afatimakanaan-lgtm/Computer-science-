@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT & Coding Master Hub | الموسوعة الشاملة والاحترافية</title>
+<style>
+  :root {
+    --bg-main: #0b0f19;
+    --bg-card: #131c2e;
+    --bg-hover: #1e293b;
+    --accent: #38bdf8;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: #1e293b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+  body { background-color: var(--bg-main); color: var(--text-main); display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 270px; background: #020617; border-left: 1px solid var(--border);
+    padding: 20px 15px; display: flex; flex-direction: column; gap: 8px;
+    position: fixed; height: 100vh; overflow-y: auto; z-index: 100;
+  }
+  .logo { font-size: 1.2rem; font-weight: bold; color: var(--accent); text-align: center; padding-bottom: 15px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+  .nav-btn {
+    background: transparent; color: var(--text-muted); border: none; padding: 11px 14px;
+    text-align: right; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
+    transition: 0.2s; display: flex; align-items: center; gap: 10px;
+  }
+  .nav-btn:hover, .nav-btn.active { background: var(--bg-card); color: var(--accent); font-weight: bold; }
+
+  /* Main Content */
+  .main { margin-right: 270px; flex: 1; padding: 25px; max-width: 1250px; }
+  .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 15px; flex-wrap: wrap; }
+  .search-box {
+    flex: 1; min-width: 280px; padding: 12px 18px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--bg-card); color: white; font-size: 1rem;
+  }
+  .search-box:focus { outline: none; border-color: var(--accent); }
+
+  /* Sections */
+  .section { display: none; animation: fadeIn 0.3s; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  h2 { color: var(--accent); margin-bottom: 15px; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .filter-btn {
+    background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);
+    padding: 7px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem;
+  }
+  .filter-btn.active { background: var(--accent); color: #020617; font-weight: bold; }
+
+  /* Tables & Cards */
+  .table-container { overflow-x: auto; background: var(--bg-card); border-radius: 10px; border: 1px solid var(--border); max-height: 650px; overflow-y: auto; }
+  table { width: 100%; border-collapse: collapse; text-align: right; }
+  th, td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+  th { background: #020617; color: var(--accent); position: sticky; top: 0; z-index: 10; }
+  tr:hover { background: var(--bg-hover); }
+  .badge { padding: 3px 8px; border-radius: 5px; font-size: 0.75rem; font-weight: bold; background: #0284c7; color: white; }
+  .code-pill { background: #020617; color: #38bdf8; padding: 3px 7px; border-radius: 5px; font-family: monospace; direction: ltr; display: inline-block; }
+  .copy-btn { background: var(--bg-hover); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; }
+  .copy-btn:hover { background: var(--accent); color: black; }
+
+  .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .card h3 { color: var(--accent); margin-bottom: 10px; font-size: 1.1rem; }
+  .card p, .card li { color: #cbd5e1; line-height: 1.6; font-size: 0.92rem; }
+  .card ul { padding-right: 18px; margin-top: 8px; }
+  .warning-box { background: rgba(239, 68, 68, 0.15); border-right: 4px solid var(--accent-red); padding: 12px; border-radius: 6px; margin: 12px 0; color: #fca5a5; }
+
+  /* Quiz */
+  .quiz-box { background: var(--bg-card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); max-width: 750px; }
+  .option-btn {
+    display: block; width: 100%; text-align: right; background: var(--bg-main); color: white;
+    border: 1px solid var(--border); padding: 12px 15px; margin: 10px 0; border-radius: 8px; cursor: pointer; font-size: 1rem;
+  }
+  .option-btn:hover { border-color: var(--accent); }
+  .option-btn.correct { background: rgba(16, 185, 129, 0.3); border-color: var(--accent-green); }
+  .option-btn.wrong { background: rgba(239, 68, 68, 0.3); border-color: var(--accent-red); }
+
+  @media (max-width: 768px) {
+    .sidebar { width: 100%; height: auto; position: relative; flex-direction: row; flex-wrap: wrap; }
+    .main { margin-right: 0; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="sidebar">
+    <div class="logo">💻 IT & Coding Hub (Pro)</div>
+    <button class="nav-btn active" onclick="showSection('shortcuts', this)">⌨️ اختصارات الويندوز (3 لغات)</button>
+    <button class="nav-btn" onclick="showSection('programming', this)">👨‍💻 قاموس البرمجة الكامل (C++/Java/Py/C#)</button>
+    <button class="nav-btn" onclick="showSection('pc_arch', this)">🧠 كيف يشتغل الـ PC</button>
+    <button class="nav-btn" onclick="showSection('win_settings', this)">⚙️ إعدادات وأساسيات الويندوز</button>
+    <button class="nav-btn" onclick="showSection('partition_install', this)">💿 التقسيم والفورمات الصح</button>
+    <button class="nav-btn" onclick="showSection('troubleshooting', this)">🛠️ مشاكل الويندوز وحلولها</button>
+    <button class="nav-btn" onclick="showSection('security', this)">🛡️ كشف الفيروسات والحماية</button>
+    <button class="nav-btn" onclick="showSection('unix', this)">🐧 أوامر Unix / Linux</button>
+    <button class="nav-btn" onclick="showSection('quiz', this)">📝 اختبارات تفاعلية شاملة</button>
+  </nav>
+
+  <main class="main">
+    <div class="header-bar">
+      <input type="text" id="globalSearch" class="search-box" placeholder="🔍 بحث فوري في مئات المصطلحات والاختصارات والأوامر..." onkeyup="handleGlobalSearch()">
+    </div>
+
+    <!-- 1. الاختصارات -->
+    <section id="shortcuts" class="section active">
+      <h2>⌨️ اختصارات الكيبورد وويندوز (عربي / فرنسي / إنكليزي)</h2>
+      <div class="filter-bar" id="shortcutFilters">
+        <button class="filter-btn active" onclick="filterShortcuts('ALL', this)">الكل</button>
+        <button class="filter-btn" onclick="filterShortcuts('General', this)">عامة</button>
+        <button class="filter-btn" onclick="filterShortcuts('Windows Key', this)">مفتاح Win</button>
+        <button class="filter-btn" onclick="filterShortcuts('Browser & Text', this)">متصفح ونصوص</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>الاختصار</th><th>التصنيف</th><th>English</th><th>Français</th><th>العربية</th><th>نسخ</th></tr>
+          </thead>
+          <tbody id="shortcutsTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 2. البرمجة -->
+    <section id="programming" class="section">
+      <h2>👨‍💻 قاموس كلمات ومصطلحات البرمجة (C++, Java, Python, C#)</h2>
+      <div class="filter-bar" id="progFilters">
+        <button class="filter-btn active" onclick="filterProg('ALL', this)">الكل</button>
+        <button class="filter-btn" onclick="filterProg('C++', this)">C++</button>
+        <button class="filter-btn" onclick="filterProg('Java', this)">Java</button>
+        <button class="filter-btn" onclick="filterProg('Python', this)">Python</button>
+        <button class="filter-btn" onclick="filterProg('C#', this)">C#</button>
+        <button class="filter-btn" onclick="filterProg('General', this)">مصطلحات عامة</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>الكلمة / الأمر</th><th>اللغة / القسم</th><th>English</th><th>Français</th><th>العربية</th><th>نسخ</th></tr>
+          </thead>
+          <tbody id="progTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. هاردوير -->
+    <section id="pc_arch" class="section">
+      <h2>🧠 كيف يعمل الحاسوب وتفاصيل الهاردوير (PC Architecture)</h2>
+      <div class="grid-cards">
+        <div class="card">
+          <h3>المعالج المركزي (CPU)</h3>
+          <p>عقل الحاسوب الذي ينفذ التعليمات بمليارات المرات بالثانية. يتكون من وحدات حساب ولغة منطقية (ALU) ووحدة تحكم (Control Unit)، وينفذ دورة الجلب والفك والتنفيذ.</p>
+        </div>
+        <div class="card">
+          <h3>الذاكرة العشوائية (RAM)</h3>
+          <p>ذاكرة تطايرية (Volatile) سريعة جداً تخزن بيانات البرامج المفتوحة حالياً. كلما زاد حجمها، زادت قدرة الجهاز على تشغيل برامج متعددة وثقيلة دون بطء.</p>
+        </div>
+        <div class="card">
+          <h3>وحدات التخزين (SSD & HDD)</h3>
+          <p>الـ HDD يعتمد على أقراص ميكانيكية دوارة وبطيئة نسبياً، بينما الـ SSD (وخصوصاً NVMe M.2) يعتمد على شرائح فلاش كهربائية ويصل بسرعته إلى أكثر من 7000 ميجابايت/ثانية.</p>
+        </div>
+        <div class="card">
+          <h3>عملية الإقلاع الكاملة (Boot Sequence)</h3>
+          <p>1. تشغيل الباور &larr; 2. اختبار القطع (POST) بواسطة اللوحة الأم &larr; 3. تحميل شاشة الـ UEFI/BIOS &larr; 4. قراءة قطاع الإقلاع وبدء تشغيل نظام التشغيل من القرص.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. إعدادات الويندوز -->
+    <section id="win_settings" class="section">
+      <h2>⚙️ أساسيات وإعدادات الاحتراف في ويندوز</h2>
+      <div class="grid-cards">
+        <div class="card">
+          <h3>إدارة برامج الإقلاع (Startup)</h3>
+          <p>من Task Manager &larr; Startup، قم بتعطيل البرامج غير الضرورية (مثل تطبيقات الدردشة والألعاب) لتسريع إقلاع الجهاز وجعله جاهزاً خلال ثوانٍ معدودة.</p>
+        </div>
+        <div class="card">
+          <h3>خطط الطاقة (Power Plans)</h3>
+          <p>اختر High Performance عند التوصيل بالشاحن للبرمجة والمونتاج والألعاب، وBalanced للحفاظ على عمر البطارية وتخفيف الحرارة عند التصفح الخفيف.</p>
+        </div>
+        <div class="card">
+          <h3>التحكم بالتحديثات والخدمات</h3>
+          <p>استخدم نافذة <span class="code-pill">services.msc</span> لإيقاف الخدمات الزائدة التي تستهلك الرام والمعالج بدون فائدة واضحة.</p>
+        </div>
+        <div class="card">
+          <h3>التنظيف الدوري للملفات المؤقتة</h3>
+          <p>استخدم أمر <span class="code-pill">%temp%</span> و <span class="code-pill">prefetch</span> من نافذة Run لحذف الملفات المؤقتة المتراكمة وتوفير مساحة في القرص C.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. التقسيم والفورمات -->
+    <section id="partition_install" class="section">
+      <h2>💿 تقسيم الهارد وطريقة الفورمات النظيفة</h2>
+      <div class="warning-box">⚠️ احفظ دائماً نسخة احتياطية من بياناتك وملفاتك المهمة قبل أي عملية فورمات أو تعديل على التقسيمات.</div>
+      <div class="grid-cards">
+        <div class="card">
+          <h3>الفرق بين GPT و MBR</h3>
+          <p><b>GPT:</b> المعيار الحديث والأساسي لويندوز 11، يدعم UEFI ومساحات هائلة وأكثر من 128 بارتشن.<br><b>MBR:</b> المعيار القديم (Legacy)، يدعم أقصى حد 2 تيرابايت و4 أقسام فقط.</p>
+        </div>
+        <div class="card">
+          <h3>أنظمة الملفات (File Systems)</h3>
+          <p><b>NTFS:</b> النظام الأساسي والأكثر أماناً لويندوز.<br><b>exFAT:</b> الأفضل للفلاشات والهاردات الخارجية لنقلها بين ويندوز وماك ودعم الملفات الكبيرة.</p>
+        </div>
+        <div class="card">
+          <h3>حرق الويندوز ببرنامج Rufus</h3>
+          <p>اختر الفلاشة ونسخة الـ ISO، وحدد نوع التقسيم (GPT) والأداة ستتولى تهيئة الفلاشة وجعلها قابلة للإقلاع (Bootable) بكل سهولة.</p>
+        </div>
+        <div class="card">
+          <h3>إدارة الأقراص (Disk Management)</h3>
+          <p>أداة مدمجة في ويندوز (<span class="code-pill">diskmgmt.msc</span>) لتقسيم، تقليص (Shrink)، أو دمج الأقراص والبارتشنات بكل احترافية وبدون برامج خارجية.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. المشاكل والحلول -->
+    <section id="troubleshooting" class="section">
+      <h2>🛠️ دليل تشخيص وإصلاح مشاكل الويندوز المتقدمة</h2>
+      <div class="grid-cards">
+        <div class="card">
+          <h3>إصلاح ملفات النظام التالفة</h3>
+          <p>افتح موجه الأوامر (CMD كمسؤول) ونفذ:<br><span class="code-pill">sfc /scannow</span><br>ثم:<br><span class="code-pill">DISM /Online /Cleanup-Image /RestoreHealth</span></p>
+        </div>
+        <div class="card">
+          <h3>إصلاح مشاكل الشبكة والإنترنت</h3>
+          <p>أوامر تصفير الـ DNS والكسل في كرت الشبكة:<br><span class="code-pill">ipconfig /flushdns</span><br><span class="code-pill">netsh winsock reset</span></p>
+        </div>
+        <div class="card">
+          <h3>حل مشكلة امتلاء القرص C بملفات الوهمية</h3>
+          <p>فحص المساحة بأداة WizTree المجانية لمعرفة الملفات الضخمة وحذفها، وإيقاف ميزة Hibernation إن لم تكن بحاجة لها بالأمر <span class="code-pill">powercfg -h off</span>.</p>
+        </div>
+        <div class="card">
+          <h3>معالجة الشاشة الزرقاء (BSOD)</h3>
+          <p>تدوين كود الخطأ (مثل MEMORY_MANAGEMENT)، الدخول بالـ Safe Mode، وإلغاء آخر تعريف أو تحديث سبب المشكلة.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. الأمان -->
+    <section id="security" class="section">
+      <h2>🛡️ كشف الفيروسات، الروتكت، والاتصالات المشبوهة</h2>
+      <div class="grid-cards">
+        <div class="card">
+          <h3>مراقبة العمليات والمسارات يدوياً</h3>
+          <p>من Task Manager، انقر كليك يمين على أي برنامج مشبوه واختر <b>Open file location</b>. إذا كان الملف داخل مجلدات Temp أو مسارات غير معروفة فهو فيروس محتمل.</p>
+        </div>
+        <div class="card">
+          <h3>فحص الاتصالات النشطة عبر الأوامر</h3>
+          <p>استخدم الأمر <span class="code-pill">netstat -ano</span> لمعرفة كل البرامج المتصلة بالإنترنت حالياً ورقم العملية (PID) لمعرفة أي برنامج يرسل بيانات للخارج.</p>
+        </div>
+        <div class="card">
+          <h3>أداة MRT لإزالة البرامج الضارة</h3>
+          <p>اضغط <span class="code-pill">Win + R</span> واكتب <span class="code-pill">mrt</span> لتشغيل أداة مايكروسوفت المدمجة لفحص وإزالة الفيروسات المستعصية.</p>
+        </div>
+        <div class="card">
+          <h3>فحص Defender Offline</h3>
+          <p>إجراء فحص عميق قبل إقلاع النظام بالكامل لضمان القضاء على الفيروسات المستعصية (Rootkits) التي تختبئ أثناء عمل الويندوز.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. أوامر Unix -->
+    <section id="unix" class="section">
+      <h2>🐧 موسوعة أوامر Unix / Linux الكاملة</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>الأمر (Command)</th><th>الوظيفة والشرح التفصيلي</th><th>مثال عملي</th><th>نسخ</th></tr>
+          </thead>
+          <tbody id="unixTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 9. الاختبارات -->
+    <section id="quiz" class="section">
+      <h2>📝 بنك الاختبارات والأسئلة التفاعلية الشاملة</h2>
+      <div class="quiz-box" id="quizContainer">
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px; color:var(--accent);">
+          <span id="quizProgress">السؤال 1 من 10</span>
+          <span id="quizScore">النتيجة: 0</span>
+        </div>
+        <h3 id="questionText" style="margin-bottom:15px; line-height:1.5;"></h3>
+        <div id="optionsContainer"></div>
+        <p id="quizFeedback" style="margin-top:15px; font-weight:bold;"></p>
+        <button id="nextQuestionBtn" class="filter-btn active" style="margin-top:15px; display:none;" onclick="nextQuestion()">السؤال التالي &larr;</button>
+      </div>
+    </section>
+
+  </main>
+
+<script>
+  // قاعدة البيانات الموسعة والشاملة للاختصارات (عربي، فرنسي، إنكليزي)
+  const shortcutsData = [
+    { key: "Ctrl + C", cat: "General", en: "Copy selected item", fr: "Copier l'élément sélectionné", ar: "نسخ العنصر المحدد" },
+    { key: "Ctrl + X", cat: "General", en: "Cut selected item", fr: "Couper l'élément sélectionné", ar: "قص العنصر المحدد" },
+    { key: "Ctrl + V", cat: "General", en: "Paste copied/cut item", fr: "Coller l'élément", ar: "لصق العنصر" },
+    { key: "Ctrl + Z", cat: "General", en: "Undo an action", fr: "Annuler une action", ar: "تراجع عن آخر خطوة" },
+    { key: "Ctrl + Y", cat: "General", en: "Redo an action", fr: "Rétablir une action", ar: "إعادة الخطوة المتراجع عنها" },
+    { key: "Ctrl + A", cat: "General", en: "Select all items", fr: "Tout sélectionner", ar: "تحديد الكل" },
+    { key: "Ctrl + S", cat: "General", en: "Save current file", fr: "Enregistrer le fichier", ar: "حفظ الملف الحالي" },
+    { key: "Ctrl + P", cat: "General", en: "Print current page or document", fr: "Imprimer la page active", ar: "طباعة الصفحة أو المستند" },
+    { key: "Ctrl + F", cat: "General", en: "Find text or words", fr: "Rechercher du texte", ar: "البحث عن نص أو كلمات" },
+    { key: "Ctrl + H", cat: "General", en: "Find and replace text", fr: "Rechercher et remplacer", ar: "البحث والاستبدال" },
+    { key: "Alt + Tab", cat: "General", en: "Switch between open apps", fr: "Basculer entre les applications", ar: "التبديل بين النوافذ المفتوحة" },
+    { key: "Alt + F4", cat: "General", en: "Close active window", fr: "Fermer la fenêtre active", ar: "إغلاق النافذة النشطة" },
+    { key: "Ctrl + Shift + Esc", cat: "General", en: "Open Task Manager directly", fr: "Ouvrir le Gestionnaire des tâches", ar: "فتح مدير المهام مباشرة" },
+    { key: "Delete", cat: "General", en: "Move to Recycle Bin", fr: "Envoyer à la corbeille", ar: "نقل إلى سلة المحذوفات" },
+    { key: "Shift + Delete", cat: "General", en: "Permanently delete item", fr: "Supprimer définitivement", ar: "حذف نهائي بدون سلة المحذوفات" },
+    { key: "F2", cat: "General", en: "Rename selected item", fr: "Renommer l'élément", ar: "إعادة تسمية العنصر المحدد" },
+    { key: "F5", cat: "General", en: "Refresh active window", fr: "Actualiser la fenêtre active", ar: "تحديث الصفحة أو النافذة النشطة" },
+    
+    { key: "Win + D", cat: "Windows Key", en: "Show or hide desktop", fr: "Afficher ou masquer le bureau", ar: "إظهار أو إخفاء سطح المكتب" },
+    { key: "Win + E", cat: "Windows Key", en: "Open File Explorer", fr: "Ouvrir l'Explorateur de fichiers", ar: "فتح مستكشف الملفات" },
+    { key: "Win + L", cat: "Windows Key", en: "Lock your PC", fr: "Verrouiller votre PC", ar: "قفل شاشة الكمبيوتر" },
+    { key: "Win + I", cat: "Windows Key", en: "Open Windows Settings", fr: "Ouvrir les Paramètres Windows", ar: "فتح إعدادات الويندوز" },
+    { key: "Win + R", cat: "Windows Key", en: "Open Run dialog box", fr: "Ouvrir la boîte Exécuter", ar: "فتح نافذة التشغيل (Run)" },
+    { key: "Win + Shift + S", cat: "Windows Key", en: "Take a screenshot snippet", fr: "Prendre une capture d'écran", ar: "أخذ لقطة شاشة مخصصة" },
+    { key: "Win + V", cat: "Windows Key", en: "Open Clipboard history", fr: "Ouvrir l'historique du Presse-papiers", ar: "فتح سجل الحافظة (المنسوخات)" },
+    { key: "Win + Tab", cat: "Windows Key", en: "Open Task View", fr: "Ouvrir l'affichage des tâches", ar: "عرض المهام وأسطح المكتب" },
+    { key: "Win + .", cat: "Windows Key", en: "Open Emoji panel", fr: "Ouvrir le panneau d'émojis", ar: "فتح لوحة الرموز التعبيرية" },
+    { key: "Win + X", cat: "Windows Key", en: "Open Quick Link menu", fr: "Ouvrir le menu d'accès rapide", ar: "فتح قائمة الأدوات السريعة" },
+    { key: "Win + Arrow Keys", cat: "Windows Key", en: "Snap active window to sides/corners", fr: "Ancrer la fenêtre active", ar: "تثبيت النافذة على جوانب الشاشة" },
+
+    { key: "Ctrl + T", cat: "Browser & Text", en: "Open a new browser tab", fr: "Ouvrir un nouvel onglet", ar: "فتح لسان تبويب جديد" },
+    { key: "Ctrl + W", cat: "Browser & Text", en: "Close current tab", fr: "Fermer l'onglet actuel", ar: "إغلاق التبويب الحالي" },
+    { key: "Ctrl + Shift + T", cat: "Browser & Text", en: "Reopen last closed tab", fr: "Rouvrir le dernier onglet fermé", ar: "إعادة فتح آخر تبويب مغلق" },
+    { key: "Ctrl + Shift + N", cat: "Browser & Text", en: "Open Incognito window", fr: "Ouvrir une fenêtre de navigation privée", ar: "فتح نافذة تصفح مخفي جديدة" },
+    { key: "Ctrl + Shift + Delete", cat: "Browser & Text", en: "Clear browsing data", fr: "Effacer les données de navigation", ar: "مسح بيانات التصفح والذاكرة المؤقتة" },
+    { key: "Ctrl + Shift + Arrow", cat: "Browser & Text", en: "Select text word by word", fr: "Sélectionner du texte mot par mot", ar: "تحديد النص كلمة بكلمة" },
+    { key: "Home / End", cat: "Browser & Text", en: "Go to start/end of line", fr: "Aller au début/fin de ligne", ar: "الانتقال لبداية أو نهاية السطر" },
+    { key: "Ctrl + Home / End", cat: "Browser & Text", en: "Go to start/end of document", fr: "Aller au début/fin du document", ar: "الانتقال لبداية أو نهاية المستند" }
+  ];
+
+  // قاموس البرمجة الموسع (أكثر من 60 كلمة/مصطلح للغات C++, Java, Python, C#)
+  const programmingData = [
+    // C++
+    { word: "#include <iostream>", lang: "C++", en: "Include standard input/output stream library", fr: "Inclure la bibliothèque d'E/S standard", ar: "تضمين مكتبة الإدخال والإخراج الأساسية" },
+    { word: "#include <stdio.h>", lang: "C++", en: "Include C standard input/output header", fr: "Inclure l'en-tête d'E/S standard C", ar: "تضمين ملف الإدخال والإخراج بلغة C" },
+    { word: "int main()", lang: "C++", en: "Main entry point of a C++ program", fr: "Point d'entrée principal du programme", ar: "الدالة الرئيسية لبدء تنفيذ برنامج C++" },
+    { word: "std::cout", lang: "C++", en: "Standard output stream for printing", fr: "Flux de sortie standard pour l'affichage", ar: "أمر الطباعة القياسي في C++" },
+    { word: "std::cin", lang: "C++", en: "Standard input stream for reading", fr: "Flux d'entrée standard pour la lecture", ar: "أمر القراءة القياسي من لوحة المفاتيح" },
+    { word: "printf()", lang: "C++", en: "Formatted output function from stdio.h", fr: "Fonction de sortie formatée", ar: "دالة الطباعة المنسقة عبر stdio.h" },
+    { word: "scanf()", lang: "C++", en: "Formatted input function from stdio.h", fr: "Fonction d'entrée formatée", ar: "دالة القراءة المنسقة عبر stdio.h" },
+    { word: "new / delete", lang: "C++", en: "Dynamic memory allocation and deallocation", fr: "Allocation dynamique de mémoire", ar: "تخصيص وتحرير الذاكرة ديناميكياً" },
+    { word: "vector", lang: "C++", en: "Dynamic array container in STL", fr: "Tableau dynamique de la STL", ar: "مصفوفة ديناميكية مرنة في مكتبة STL" },
+    { word: "pointer (* / &)", lang: "C++", en: "Variable holding memory address", fr: "Pointeur stockant une adresse mémoire", ar: "مؤشر لتخزين عنوان الذاكرة والمتغيرات" },
+
+    // Java
+    { word: "public static void main", lang: "Java", en: "Main entry point method in Java", fr: "Méthode point d'entrée principal en Java", ar: "الدالة الرئيسية لتشغيل برنامج جافا" },
+    { word: "System.out.println()", lang: "Java", en: "Prints text to console with a newline", fr: "Affiche du texte avec un saut de ligne", ar: "طباعة نص على الشاشة مع سطر جديد" },
+    { word: "Scanner", lang: "Java", en: "Class used to get user input", fr: "Classe pour obtenir l'entrée utilisateur", ar: "فئة لاستقبال المدخلات من المستخدم" },
+    { word: "extends", lang: "Java", en: "Keyword for class inheritance", fr: "Mot-clé pour l'héritage de classes", ar: "كلمة لوراثة الفئات في البرمجة الكائنية" },
+    { word: "implements", lang: "Java", en: "Keyword to implement an interface", fr: "Implémenter une interface", ar: "لتطبيق الواجهات البرمجية (Interfaces)" },
+    { word: "package", lang: "Java", en: "Groups related classes together", fr: "Groupe des classes liées ensemble", ar: "حزمة لتنظيم وتجميع الفئات المرتبطة" },
+    { word: "private / protected", lang: "Java", en: "Access control modifiers", fr: "Modificateurs de contrôle d'accès", ar: "محددات الوصول لحماية الخصائص والدوال" },
+    { word: "try / catch / finally", lang: "Java", en: "Exception handling blocks", fr: "Blocs de gestion des exceptions", ar: "هيكل معالجة الأخطاء والاستثناءات" },
+    { word: "interface", lang: "Java", en: "Contract specifying method signatures", fr: "Contrat spécifiant des méthodes", ar: "واجهة تحدد مجموعة دوال بدون تنفيذ" },
+    { word: "ArrayList", lang: "Java", en: "Resizable array implementation", fr: "Implémentation de tableau redimensionnable", ar: "قائمة مصفوفة مرنة وقابلة للتمدد" },
+
+    // Python
+    { word: "def", lang: "Python", en: "Keyword used to define a function", fr: "Mot-clé pour définir une fonction", ar: "كلمة محجوزة لتعريف دالة في بايثون" },
+    { word: "print()", lang: "Python", en: "Output function to display text", fr: "Fonction d'affichage de texte", ar: "دالة الطباعة الأساسية في بايثون" },
+    { word: "input()", lang: "Python", en: "Read input string from user", fr: "Lire l'entrée de l'utilisateur", ar: "قراءة مدخلات المستخدم النصية" },
+    { word: "import / from", lang: "Python", en: "Load external modules or libraries", fr: "Charger des modules externes", ar: "استيراد مكتبات ووحدات خارجية" },
+    { word: "lambda", lang: "Python", en: "Anonymous inline short function", fr: "Fonction anonyme en ligne", ar: "دالة مجهولة سطرية قصيرة ومجهولة الاسم" },
+    { word: "self", lang: "Python", en: "Reference to the current instance of a class", fr: "Référence à l'instance courante", ar: "مرجع للكائن الحالي داخل الفئة" },
+    { word: "try / except", lang: "Python", en: "Catch and handle runtime exceptions", fr: "Gérer les exceptions à l'exécution", ar: "معالجة الاستثناءات والأخطاء في بايثون" },
+    { word: "with open()", lang: "Python", en: "Context manager for safe file handling", fr: "Gestionnaire de contexte pour fichiers", ar: "إدارة فتح وإغلاق الملفات بأمان" },
+    { word: "dict / list / tuple", lang: "Python", en: "Built-in data structures", fr: "Structures de données intégrées", ar: "هياكل البيانات الأساسية في بايثون" },
+    { word: "global / nonlocal", lang: "Python", en: "Variable scope keyword modifiers", fr: "Modificateurs de portée de variable", ar: "تحديد نطاق المتغيرات العامة والمحلية" },
+
+    // C#
+    { word: "Console.WriteLine()", lang: "C#", en: "Write text to the console window", fr: "Écrire du texte dans la console", ar: "طباعة نص في نافذة الكونسول بلغة C#" },
+    { word: "Console.ReadLine()", lang: "C#", en: "Read input string from console", fr: "Lire une ligne de texte de la console", ar: "قراءة نص مدخل من لوحة المفاتيح" },
+    { word: "namespace", lang: "C#", en: "Organizes related classes and code blocks", fr: "Organise les classes associées", ar: "مساحة أسماء لتنظيم الأكواد والفئات" },
+    { word: "using", lang: "C#", en: "Imports namespaces or disposes objects", fr: "Importe des espaces de noms", ar: "استيراد مساحات الأسماء أو التخلص من الكائنات" },
+    { word: "async / await", lang: "C#", en: "Asynchronous programming keywords", fr: "Mots-clés de programmation asynchrone", ar: "البرمجة غير المتزامنة لتسريع المهام" },
+    { word: "get / set", lang: "C#", en: "Property accessors for encapsulation", fr: "Accesseurs de propriétés", ar: "خصائص القراءة والكتابة للمتغيرات (Encapsulation)" },
+    { word: "virtual / override", lang: "C#", en: "Polymorphism method overriding modifiers", fr: "Modificateurs de redéfinition", ar: "تعديل وإعادة كتابة الدوال لتطبيق تعدد الأشكال" },
+    { word: "List<T>", lang: "C#", en: "Generic strongly-typed dynamic list", fr: "Liste générique typée dynamique", ar: "قائمة عامة ديناميكية آمنة ومحددة النوع" },
+    { word: "LINQ", lang: "C#", en: "Language Integrated Query for collections", fr: "Requête intégrée au langage", ar: "استعلام البيانات المدمج في اللغة" },
+    { word: "delegate / event", lang: "C#", en: "Method pointers and event handlers", fr: "Pointeurs de méthodes et événements", ar: "المؤتمرات ومعالجة الأحداث والاشعارات" },
+
+    // General
+    { word: "Compiler", lang: "General", en: "Translates high-level source code to machine code", fr: "Traduit le code source en code machine", ar: "مترجم يحول الكود بالكامل إلى لغة الآلة" },
+    { word: "Interpreter", lang: "General", en: "Executes source code line by line directly", fr: "Exécute le code source ligne par ligne", ar: "مفسر ينفذ الكود سطر بسطر مباشرة" },
+    { word: "Variable", lang: "General", en: "Named container for storing data values", fr: "Conteneur nommé pour stocker des données", ar: "متغير لحفظ البيانات والقيم في الذاكرة" },
+    { word: "Function / Method", lang: "General", en: "Reusable block of code performing a task", fr: "Bloc de code réutilisable", ar: "دالة أو تابعه لتنفيذ مهمة محددة وإعادة استخدامها" },
+    { word: "Array", lang: "General", en: "Fixed-size collection of items of same type", fr: "Collection d'éléments de même type", ar: "مصفوفة تخزن مجموعة عناصر متجانسة" },
+    { word: "Algorithm", lang: "General", en: "Step-by-step procedure for solving a problem", fr: "Procédure étape par étape pour résoudre un problème", ar: "خوارزمية وخطوات متسلسلة لحل مشكلة ما" },
+    { word: "Debugging", lang: "General", en: "Finding and fixing errors in code", fr: "Trouver et corriger les erreurs", ar: "عملية تتبع واكتشاف وإصلاح الأخطاء البرمجية" },
+    { word: "Recursion", lang: "General", en: "A function calling itself to solve sub-problems", fr: "Une fonction qui s'appelle elle-même", ar: "الاستدعاء الذاتي (دالة تستدعي نفسها)" }
+  ];
+
+  // أوامر Unix الكاملة
+  const unixCommands = [
+    { cmd: "pwd", desc: "Print Working Directory: عرض مسار المجلد الحالي الذي تتواجد فيه تماماً.", ex: "pwd" },
+    { cmd: "ls -la", desc: "List: عرض جميع الملفات والمجلدات بما فيها المخفية مع الصلاحيات والأحجام والتفاصيل.", ex: "ls -la /var/www" },
+    { cmd: "cd", desc: "Change Directory: التنقل بين المجلدات (مثال: الانتقال للمجلد الرئيسي cd ~).", ex: "cd /etc/nginx" },
+    { cmd: "mkdir", desc: "Make Directory: إنشاء مجلد جديد بالاسم المحدد.", ex: "mkdir -p /var/www/html/assets" },
+    { cmd: "rm -rf", desc: "Remove: حذف مجلد أو ملف بالقوة وبكل محتوياته (أمر خطير يجب الحذر منه).", ex: "rm -rf /tmp/old_cache" },
+    { cmd: "cp", desc: "Copy: نسخ الملفات أو المجلدات من مكان لآخر.", ex: "cp config.json config.backup" },
+    { cmd: "mv", desc: "Move / Rename: نقل أو إعادة تسمية الملفات والمجلدات.", ex: "mv old_name.txt new_name.txt" },
+    { cmd: "chmod", desc: "Change Mode: تعديل صلاحيات وقراءات وتنفيذ الملفات (مثل chmod 755).", ex: "chmod +x deploy.sh" },
+    { cmd: "chown", desc: "Change Owner: تغيير مالك الملف أو المجلد والمجموعة التابع لها.", ex: "chown -R www-data:www-data /var/www" },
+    { cmd: "sudo", desc: "Superuser Do: تشغيل الأمر بصلاحيات المدير الأعلى (Root).", ex: "sudo apt update && sudo apt upgrade -y" },
+    { cmd: "cat", desc: "Concatenate: عرض محتوى ملف نصي بالكامل مباشرة على الشاشة.", ex: "cat /etc/passwd" },
+    { cmd: "grep", desc: "Global Regular Expression Print: البحث عن كلمة أو سطر معين داخل الملفات.", ex: "grep 'listen' /etc/nginx/nginx.conf" },
+    { cmd: "ps aux", desc: "Process Status: عرض كافة العمليات والبرامج قيد التشغيل في النظام مع تفاصيلها.", ex: "ps aux | grep apache" },
+    { cmd: "kill -9", desc: "Kill Process: إجبار عملية معينة على التوقف بالقوة باستخدام رقمها (PID).", ex: "kill -9 3491" },
+    { cmd: "df -h", desc: "Disk Free: عرض المساحة المستخدمة والمتبقية في أقراص النظام بشكل مقروء.", ex: "df -h" },
+    { cmd: "free -m", desc: "Free Memory: عرض حجم الذاكرة العشوائية (RAM) المستهلكة والمتاحة بالميجابايت.", ex: "free -m" },
+    { cmd: "tar -czvf", desc: "Compress: ضغط مجموعة ملفات أو مجلد بصيغة tar.gz الشهيرة.", ex: "archive.tar.gz /var/www/html" },
+    { cmd: "systemctl", desc: "System Control: إدارة خدمات ونظام التشغيل (تشغيل، إيقاف، إعادة تشغيل).", ex: "systemctl restart nginx" }
+  ];
+
+  // بنك الأسئلة الشامل
+  const quizQuestions = [
+    { q: "أي جدول تقسيم (Partition Style) مطلوب حصرياً لتثبيت نظام ويندوز 11 ويدعم مساحات تخزين ضخمة؟", opts: ["MBR", "GPT", "FAT32", "exFAT"], ans: 1 },
+    { q: "ما هو أمر CMD المستخدم حصرياً لفحص وإصلاح ملفات النظام التالفة في ويندوز؟", opts: ["ipconfig /all", "sfc /scannow", "netstat -ano", "cleanmgr"], ans: 1 },
+    { q: "أي اختصار من لوحة المفاتيح يفتح مدير المهام (Task Manager) بشكل مباشر وسريع؟", opts: ["Ctrl + Alt + Del", "Win + E", "Ctrl + Shift + Esc", "Alt + F4"], ans: 2 },
+    { q: "في لغة بايثون (Python)، ما هي الكلمة المحجوزة الأساسية المستخدمة لتعريف دالة جديدة؟", opts: ["function", "void", "func", "def"], ans: 3 },
+    { q: "ما هو أمر Unix/Linux المستخدم لتعديل وتغيير صلاحيات تشخيص وقراءة ملف أو سكربت؟", opts: ["chown", "chmod", "mkdir", "grep"], ans: 1 },
+    { q: "أي نوع من وحدات الذاكرة يفقد بياناته بالكامل بمجرد انقطاع التيار الكهربائي عن الحاسوب؟", opts: ["SSD", "HDD", "RAM", "ROM"], ans: 2 },
+    { q: "ما هو الاختصار المخصص لأخذ لقطة شاشة مرنة ومحددة لجزء من شاشة الويندوز؟", opts: ["Win + Shift + S", "Win + D", "Ctrl + P", "Win + L"], ans: 0 },
+    { q: "أي نظام ملفات يعتبر الخيار الأفضل والأكثر توافقاً للفلاشات والهاردات الخارجية بين ويندوز وماك؟", opts: ["FAT32", "NTFS", "exFAT", "EXT4"], ans: 2 },
+    { q: "في لغة C++، ما هو الأمر أو الكلمة المستخدمة لطباعة النصوص على الشاشة؟", opts: ["print()", "std::cout", "Console.WriteLine()", "echo"], ans: 1 },
+    { q: "ما هو الأمر المستخدم في نظام Linux لعرض مسار المجلد الحالي الذي تتواجد فيه؟", opts: ["ls", "pwd", "cd", "cat"], ans: 1 }
+  ];
+
+  // دالة العرض والتنقل
+  function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (btn) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  }
+
+  function copyText(text) {
+    navigator.clipboard.writeText(text);
+    alert("تم نسخ: " + text);
+  }
+
+  function renderShortcuts(data) {
+    const tbody = document.getElementById('shortcutsTableBody');
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><span class="code-pill">${item.key}</span></td>
+        <td><span class="badge">${item.cat}</span></td>
+        <td dir="ltr">${item.en}</td>
+        <td dir="ltr">${item.fr}</td>
+        <td>${item.ar}</td>
+        <td><button class="copy-btn" onclick="copyText('${item.key}')">نسخ</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function filterShortcuts(cat, btn) {
+    document.querySelectorAll('#shortcutFilters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filtered = cat === 'ALL' ? shortcutsData : shortcutsData.filter(s => s.cat === cat);
+    renderShortcuts(filtered);
+  }
+
+  function renderProg(data) {
+    const tbody = document.getElementById('progTableBody');
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><span class="code-pill">${item.word}</span></td>
+        <td><span class="badge">${item.lang}</span></td>
+        <td dir="ltr">${item.en}</td>
+        <td dir="ltr">${item.fr}</td>
+        <td>${item.ar}</td>
+        <td><button class="copy-btn" onclick="copyText('${item.word}')">نسخ</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function filterProg(lang, btn) {
+    document.querySelectorAll('#progFilters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filtered = lang === 'ALL' ? programmingData : programmingData.filter(p => p.lang.includes(lang));
+    renderProg(filtered);
+  }
+
+  function renderUnix(data) {
+    const tbody = document.getElementById('unixTableBody');
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><span class="code-pill">${item.cmd}</span></td>
+        <td>${item.desc}</td>
+        <td><span class="code-pill">${item.ex}</span></td>
+        <td><button class="copy-btn" onclick="copyText('${item.ex}')">نسخ</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function handleGlobalSearch() {
+    const q = document.getElementById('globalSearch').value.toLowerCase();
+    renderShortcuts(shortcutsData.filter(s =>
+      s.key.toLowerCase().includes(q) || s.en.toLowerCase().includes(q) ||
+      s.fr.toLowerCase().includes(q) || s.ar.includes(q)
+    ));
+    renderProg(programmingData.filter(p =>
+      p.word.toLowerCase().includes(q) || p.lang.toLowerCase().includes(q) ||
+      p.en.toLowerCase().includes(q) || p.fr.toLowerCase().includes(q) || p.ar.includes(q)
+    ));
+    renderUnix(unixCommands.filter(u =>
+      u.cmd.toLowerCase().includes(q) || u.desc.toLowerCase().includes(q) || u.ex.toLowerCase().includes(q)
+    ));
+  }
+
+  // محرك الاختبارات
+  let currentQ = 0, score = 0, answered = false;
+
+  function loadQuiz() {
+    answered = false;
+    document.getElementById('nextQuestionBtn').style.display = 'none';
+    document.getElementById('quizFeedback').innerText = '';
+    const qObj = quizQuestions[currentQ];
+    document.getElementById('quizProgress').innerText = `السؤال ${currentQ + 1} من ${quizQuestions.length}`;
+    document.getElementById('questionText').innerText = qObj.q;
+
+    const optsDiv = document.getElementById('optionsContainer');
+    optsDiv.innerHTML = qObj.opts.map((opt, idx) => `
+      <button class="option-btn" onclick="checkAnswer(${idx}, this)">${opt}</button>
+    `).join('');
+  }
+
+  function checkAnswer(selectedIdx, btn) {
+    if (answered) return;
+    answered = true;
+    const correctIdx = quizQuestions[currentQ].ans;
+    const allBtns = document.querySelectorAll('.option-btn');
+
+    if (selectedIdx === correctIdx) {
+      btn.classList.add('correct');
+      score++;
+      document.getElementById('quizScore').innerText = `النتيجة: ${score}`;
+      document.getElementById('quizFeedback').style.color = '#10b981';
+      document.getElementById('quizFeedback').innerText = '✅ إجابة صحيحة! أحسنت.';
+    } else {
+      btn.classList.add('wrong');
+      allBtns[correctIdx].classList.add('correct');
+      document.getElementById('quizFeedback').style.color = '#ef4444';
+      document.getElementById('quizFeedback').innerText = `❌ إجابة خاطئة. الإجابة الصحيحة هي: ${quizQuestions[currentQ].opts[correctIdx]}`;
+    }
+    document.getElementById('nextProjectBtn'] || (document.getElementById('nextQuestionBtn').style.display = 'inline-block');
+  }
+
+  function nextQuestion() {
+    currentQ++;
+    if (currentQ < quizQuestions.length) {
+      loadQuiz();
+    } else {
+      document.getElementById('quizContainer').innerHTML = `
+        <h3 style="color:var(--accent); margin-bottom:10px;">🎉 مبروك! أنهيت الاختبار بنجاح</h3>
+        <p style="font-size:1.2rem; margin-bottom:20px;">نتيجتك النهائية: <b>${score} من ${quizQuestions.length}</b></p>
+        <button class="filter-btn active" onclick="location.reload()">إعادة الاختبار من جديد</button>
+      `;
+    }
+  }
+
+  // التشغيل الأولي
+  renderShortcuts(shortcutsData);
+  renderProg(programmingData);
+  renderUnix(unixCommands);
+  loadQuiz();
+</script>
+</body>
+</html>
